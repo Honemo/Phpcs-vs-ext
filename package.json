@@ -26,12 +26,6 @@
         "category": "PHPCS"
       },
       {
-        "command": "phpcs-vs-ext.refresh",
-        "title": "Refresh",
-        "icon": "$(refresh)",
-        "category": "PHPCS"
-      },
-      {
         "command": "phpcs-vs-ext.fix",
         "title": "Fix Issues",
         "icon": "$(zap)",
@@ -47,12 +41,6 @@
         "command": "phpcs-vs-ext.phpstan.run",
         "title": "Run PHPStan",
         "icon": "$(play)",
-        "category": "PHPStan"
-      },
-      {
-        "command": "phpcs-vs-ext.phpstan.refresh",
-        "title": "Refresh",
-        "icon": "$(refresh)",
         "category": "PHPStan"
       },
       {
@@ -95,11 +83,6 @@
           "group": "navigation@1"
         },
         {
-          "command": "phpcs-vs-ext.refresh",
-          "when": "view == phpcsResults",
-          "group": "navigation@2"
-        },
-        {
           "command": "phpcs-vs-ext.fix",
           "when": "view == phpcsResults",
           "group": "navigation@3"
@@ -113,11 +96,6 @@
           "command": "phpcs-vs-ext.phpstan.run",
           "when": "view == phpstanResults",
           "group": "navigation@1"
-        },
-        {
-          "command": "phpcs-vs-ext.phpstan.refresh",
-          "when": "view == phpstanResults",
-          "group": "navigation@2"
         },
         {
           "command": "phpcs-vs-ext.phpstan.clear",
