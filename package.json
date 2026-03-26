@@ -1,0 +1,151 @@
+{
+  "name": "phpcs-vs-ext",
+  "displayName": "PHP Linters (PHPCS + PHPStan)",
+  "description": "Run PHP_CodeSniffer and PHPStan and display results in TreeViews with file/error navigation",
+  "version": "0.0.1",
+  "publisher": "Honemo",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "icon": "resources/icon.png",
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "phpcs-vs-ext.run",
+        "title": "Run PHPCS",
+        "icon": "$(play)",
+        "category": "PHPCS"
+      },
+      {
+        "command": "phpcs-vs-ext.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)",
+        "category": "PHPCS"
+      },
+      {
+        "command": "phpcs-vs-ext.clear",
+        "title": "Clear Results",
+        "icon": "$(clear-all)",
+        "category": "PHPCS"
+      },
+      {
+        "command": "phpcs-vs-ext.phpstan.run",
+        "title": "Run PHPStan",
+        "icon": "$(play)",
+        "category": "PHPStan"
+      },
+      {
+        "command": "phpcs-vs-ext.phpstan.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)",
+        "category": "PHPStan"
+      },
+      {
+        "command": "phpcs-vs-ext.phpstan.clear",
+        "title": "Clear Results",
+        "icon": "$(clear-all)",
+        "category": "PHPStan"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "phpcs-sidebar",
+          "title": "PHP Linters",
+          "icon": "resources/phpcs.svg"
+        }
+      ]
+    },
+    "views": {
+      "phpcs-sidebar": [
+        {
+          "id": "phpcsResults",
+          "name": "PHPCS Results",
+          "icon": "resources/phpcs.svg",
+          "contextualTitle": "PHPCS Results"
+        },
+        {
+          "id": "phpstanResults",
+          "name": "PHPStan Results",
+          "icon": "resources/phpcs.svg",
+          "contextualTitle": "PHPStan Results"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "phpcs-vs-ext.run",
+          "when": "view == phpcsResults",
+          "group": "navigation@1"
+        },
+        {
+          "command": "phpcs-vs-ext.refresh",
+          "when": "view == phpcsResults",
+          "group": "navigation@2"
+        },
+        {
+          "command": "phpcs-vs-ext.clear",
+          "when": "view == phpcsResults",
+          "group": "navigation@3"
+        },
+        {
+          "command": "phpcs-vs-ext.phpstan.run",
+          "when": "view == phpstanResults",
+          "group": "navigation@1"
+        },
+        {
+          "command": "phpcs-vs-ext.phpstan.refresh",
+          "when": "view == phpstanResults",
+          "group": "navigation@2"
+        },
+        {
+          "command": "phpcs-vs-ext.phpstan.clear",
+          "when": "view == phpstanResults",
+          "group": "navigation@3"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "PHPCS VS Extension",
+      "properties": {
+        "phpcs-vs-ext.command": {
+          "type": "string",
+          "default": "phpcs --report=json .",
+          "description": "Command to execute (must produce PHPCS JSON output via --report=json)"
+        },
+        "phpcs-vs-ext.runOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run PHPCS when a PHP file is saved"
+        },
+        "phpcs-vs-ext.phpstanCommand": {
+          "type": "string",
+          "default": "vendor/bin/phpstan analyse --error-format=json --no-progress",
+          "description": "Command to execute (must produce PHPStan JSON output via --error-format=json)"
+        },
+        "phpcs-vs-ext.phpstan.runOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run PHPStan when a PHP file is saved"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0"
+  }
+}
