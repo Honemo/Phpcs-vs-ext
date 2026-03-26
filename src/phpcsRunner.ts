@@ -57,15 +57,15 @@ export async function runPhpcs(): Promise<PhpcsResult | null> {
 
             try {
                 const jsonStart = stdout.indexOf('{');
-                if (jsonStart === -1) {
+                const jsonEnd = stdout.lastIndexOf('}');
+                if (jsonStart === -1 || jsonEnd === -1) {
                     throw new Error('No JSON object found in output');
                 }
-                const result = JSON.parse(stdout.slice(jsonStart)) as PhpcsResult;
-                console.log(`PHPCS parsed ${Object.keys(result.files).length} file(s) with issues.`);
+                const result = JSON.parse(stdout.slice(jsonStart, jsonEnd + 1)) as PhpcsResult;
                 resolve(result);
             } catch {
                 vscode.window.showErrorMessage(
-                    `PHPCS: Failed to parse output as JSON. Make sure the command includes --report=json.`
+                    `PHPCS: Failed to parse output as JSON. Make sure the command includes --report=json.\nCommand: ${command}`
                 );
                 resolve(null);
             }

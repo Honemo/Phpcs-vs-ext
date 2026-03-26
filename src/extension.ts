@@ -22,6 +22,7 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.commands.registerCommand('phpcs-vs-ext.run', () => phpcsProvider.run()),
         vscode.commands.registerCommand('phpcs-vs-ext.refresh', () => phpcsProvider.run()),
         vscode.commands.registerCommand('phpcs-vs-ext.clear', () => phpcsProvider.clear()),
+        vscode.commands.registerCommand('phpcs-vs-ext.fix', () => phpcsProvider.fix()),
 
         // PHPStan commands
         vscode.commands.registerCommand('phpcs-vs-ext.phpstan.run', () => phpstanProvider.run()),

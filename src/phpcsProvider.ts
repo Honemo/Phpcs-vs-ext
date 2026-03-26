@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as cp from 'child_process';
 import { runPhpcs, PhpcsResult, PhpcsFileResult, PhpcsMessage } from './phpcsRunner';
 
 // ---------------------------------------------------------------------------
@@ -96,6 +97,7 @@ export class PhpcsProvider implements vscode.TreeDataProvider<PhpcsTreeItem | Em
 
     private results: PhpcsResult | null = null;
     private running = false;
+    private fixing = false;
 
     // -------------------------------------------------------------------------
 
@@ -126,6 +128,8 @@ export class PhpcsProvider implements vscode.TreeDataProvider<PhpcsTreeItem | Em
             return;
         }
         this.running = true;
+        this.results = null;
+        this._onDidChangeTreeData.fire();
 
         await vscode.window.withProgress(
             {
@@ -155,6 +159,50 @@ export class PhpcsProvider implements vscode.TreeDataProvider<PhpcsTreeItem | Em
         }
     }
 
+    async fix(): Promise<void> {
+        const config = vscode.workspace.getConfiguration('phpcs-vs-ext');
+        const fixCommand = config.get<string>('phpcsfix', 'vendor/bin/phpcbf --report=json .');
+
+        if (!fixCommand) {
+            vscode.window.showErrorMessage('PHPCS: No fix command configured.');
+            return;
+        }
+
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders || workspaceFolders.length === 0) {
+            vscode.window.showErrorMessage('PHPCS: No workspace folder is open.');
+            return;
+        }
+        const cwd = workspaceFolders[0].uri.fsPath;
+
+        this.fixing = true;
+        this.results = null;
+        this._onDidChangeTreeData.fire();
+
+        try {
+            await new Promise<void>((resolve, reject) => {
+                cp.exec(fixCommand, { cwd }, (error, stdout, stderr) => {
+                    // phpcbf exit codes: 0 = nothing to fix, 1 = fixes applied,
+                    // 2 = fixes applied but errors remain — all are success cases.
+                    // Only exit code 3+ indicates a real failure.
+                    const code = (error as (NodeJS.ErrnoException & { code?: number }) | null)?.code;
+                    if (error && (typeof code !== 'number' || code >= 3)) {
+                        reject(new Error(stderr.trim() || error.message));
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+            this.fixing = false;
+            vscode.window.showInformationMessage('PHPCS: Auto-fix completed. Refreshing results…');
+            await this.run();
+        } catch (err) {
+            this.fixing = false;
+            this._onDidChangeTreeData.fire();
+            vscode.window.showErrorMessage(`PHPCS: Auto-fix failed.\n${err instanceof Error ? err.message : String(err)}`);
+        }
+    }
+
     clear(): void {
         this.results = null;
         this._onDidChangeTreeData.fire();
@@ -163,6 +211,12 @@ export class PhpcsProvider implements vscode.TreeDataProvider<PhpcsTreeItem | Em
     // -------------------------------------------------------------------------
 
     private buildRootItems(): (PhpcsTreeItem | EmptyItem)[] {
+        if (this.fixing) {
+            return [new EmptyItem('Running PHPCBF…')];
+        }
+        if (this.running) {
+            return [new EmptyItem('Running PHPCS…')];
+        }
         if (this.results === null) {
             return [new EmptyItem('Run PHPCS to see results…')];
         }
@@ -191,6 +245,10 @@ export class PhpcsProvider implements vscode.TreeDataProvider<PhpcsTreeItem | Em
                 }
                 return aPath.localeCompare(bPath);
             })
-            .map(([filePath, fileResult]) => new FileItem(filePath, fileResult, workspaceRoot));
+            .map(([filePath, fileResult]) => new FileItem(
+                path.isAbsolute(filePath) ? filePath : path.join(workspaceRoot, filePath),
+                fileResult,
+                workspaceRoot
+            ));
     }
 }

@@ -32,6 +32,12 @@
         "category": "PHPCS"
       },
       {
+        "command": "phpcs-vs-ext.fix",
+        "title": "Fix Issues",
+        "icon": "$(zap)",
+        "category": "PHPCS"
+      },
+      {
         "command": "phpcs-vs-ext.clear",
         "title": "Clear Results",
         "icon": "$(clear-all)",
@@ -94,9 +100,14 @@
           "group": "navigation@2"
         },
         {
-          "command": "phpcs-vs-ext.clear",
+          "command": "phpcs-vs-ext.fix",
           "when": "view == phpcsResults",
           "group": "navigation@3"
+        },
+        {
+          "command": "phpcs-vs-ext.clear",
+          "when": "view == phpcsResults",
+          "group": "navigation@4"
         },
         {
           "command": "phpcs-vs-ext.phpstan.run",
@@ -122,6 +133,11 @@
           "type": "string",
           "default": "phpcs --report=json .",
           "description": "Command to execute (must produce PHPCS JSON output via --report=json)"
+        },
+        "phpcs-vs-ext.phpcsfix": {
+          "type": "string",
+          "default": "vendor/bin/phpcbf --report=json .",
+          "description": "Command to execute for auto-fixing (must produce PHPCS JSON output via --report=json)"
         },
         "phpcs-vs-ext.runOnSave": {
           "type": "boolean",

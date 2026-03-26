@@ -113,6 +113,8 @@ export class PhpstanProvider implements vscode.TreeDataProvider<PhpstanTreeItem 
             return;
         }
         this.running = true;
+        this.results = null;
+        this._onDidChangeTreeData.fire();
 
         await vscode.window.withProgress(
             {
@@ -150,6 +152,9 @@ export class PhpstanProvider implements vscode.TreeDataProvider<PhpstanTreeItem 
     // -------------------------------------------------------------------------
 
     private buildRootItems(): (PhpstanTreeItem | EmptyItem)[] {
+        if (this.running) {
+            return [new EmptyItem('Running PHPStan…')];
+        }
         if (this.results === null) {
             return [new EmptyItem('Run PHPStan to see results…')];
         }
