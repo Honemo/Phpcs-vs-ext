@@ -129,12 +129,16 @@ export class PhpstanProvider implements vscode.TreeDataProvider<PhpstanTreeItem 
         );
 
         this.running = false;
+        this._showSummary();
+    }
 
-        if (this.results) {
-            const fileCount = Object.keys(this.results.files).length;
-            const totalErrors = this.results.totals.file_errors;
+    private _showSummary(): void {
+        const results = this.results;
+        if (results) {
+            const fileCount = Object.keys(results.files).length;
+            const totalErrors = results.totals.file_errors;
 
-            if (fileCount === 0 && this.results.errors.length === 0) {
+            if (fileCount === 0 && results.errors.length === 0) {
                 vscode.window.showInformationMessage('PHPStan: No errors found.');
             } else {
                 vscode.window.showWarningMessage(

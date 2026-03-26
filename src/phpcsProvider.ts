@@ -144,10 +144,14 @@ export class PhpcsProvider implements vscode.TreeDataProvider<PhpcsTreeItem | Em
         );
 
         this.running = false;
+        this._showSummary();
+    }
 
-        if (this.results) {
-            const { errors, warnings } = this.results.totals;
-            const fileCount = Object.keys(this.results.files).length;
+    private _showSummary(): void {
+        const results = this.results;
+        if (results) {
+            const { errors, warnings } = results.totals;
+            const fileCount = Object.keys(results.files).length;
 
             if (fileCount === 0) {
                 vscode.window.showInformationMessage('PHPCS: No violations found.');
