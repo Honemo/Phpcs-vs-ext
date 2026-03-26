@@ -14,6 +14,34 @@ A Visual Studio Code extension that runs **PHP_CodeSniffer** and **PHPStan** in 
 
 ---
 
+## Installation
+
+### From the VSIX file (recommended)
+
+Download the latest `phpcs-vs-ext-x.x.x.vsix` from the [Releases](https://github.com/Honemo/Phpcs-vs-ext/releases) page, then install it in one of the following ways:
+
+**Via the VS Code command palette:**
+1. Open the command palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
+2. Run **Extensions: Install from VSIX…**
+3. Select the downloaded `.vsix` file
+
+**Via the terminal:**
+```bash
+code --install-extension phpcs-vs-ext-0.1.0.vsix
+```
+
+### From source
+
+```bash
+git clone https://github.com/Honemo/Phpcs-vs-ext.git
+cd Phpcs-vs-ext
+npm install
+npx @vscode/vsce package
+code --install-extension phpcs-vs-ext-0.1.0.vsix
+```
+
+---
+
 ## Requirements
 
 | Tool | Installation |

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3B2F6E"/>
+      <stop offset="100%" stop-color="#6A5ACD"/>
+    </linearGradient>
+    <linearGradient id="barErr" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="100%" stop-color="#C0392B"/>
+    </linearGradient>
+    <linearGradient id="barWarn" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFD93D"/>
+      <stop offset="100%" stop-color="#F39C12"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="128" height="128" rx="20" ry="20" fill="url(#bg)"/>
+
+  <!-- PHP text -->
+  <text x="64" y="52"
+    font-family="'Arial Black', 'DejaVu Sans', Arial, sans-serif"
+    font-weight="900"
+    font-size="40"
+    fill="white"
+    text-anchor="middle"
+    letter-spacing="1">PHP</text>
+
+  <!-- Divider line -->
+  <line x1="20" y1="62" x2="108" y2="62" stroke="white" stroke-width="1.5" opacity="0.35"/>
+
+  <!-- Code lint lines (horizontal bars simulating file violations) -->
+  <rect x="20" y="70" width="55" height="5" rx="2.5" fill="white" opacity="0.25"/>
+  <rect x="20" y="80" width="40" height="5" rx="2.5" fill="white" opacity="0.25"/>
+  <rect x="20" y="90" width="50" height="5" rx="2.5" fill="white" opacity="0.25"/>
+  <rect x="20" y="100" width="35" height="5" rx="2.5" fill="white" opacity="0.25"/>
+
+  <!-- Error badge (red) -->
+  <circle cx="93" cy="88" r="20" fill="url(#barErr)"/>
+  <!-- Exclamation mark -->
+  <rect x="90.5" y="78" width="5" height="11" rx="2.5" fill="white"/>
+  <circle cx="93" cy="93.5" r="2.8" fill="white"/>
+</svg>

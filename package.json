@@ -2,7 +2,11 @@
   "name": "phpcs-vs-ext",
   "displayName": "PHP Linters (PHPCS + PHPStan)",
   "description": "Run PHP_CodeSniffer and PHPStan and display results in TreeViews with file/error navigation",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Honemo/Phpcs-vs-ext.git"
+  },
   "publisher": "Honemo",
   "engines": {
     "vscode": "^1.85.0"
@@ -144,8 +148,8 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0",
     "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
     "typescript": "^5.3.0"
   }
 }
