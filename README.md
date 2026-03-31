@@ -55,52 +55,97 @@ The commands must be available in your `PATH` or via `vendor/bin/` at the worksp
 
 ## Usage
 
-1. Open a PHP folder in VS Code
-2. Click the **PHP Linters** icon in the activity bar
-3. Use the buttons in each view's title bar:
+### 1 — Open a PHP project
 
-| Button | Action |
+Open any folder containing PHP files in VS Code (`File > Open Folder…`). The extension activates automatically.
+
+### 2 — Access the sidebar
+
+Click the **PHP Linters** icon in the activity bar (left side of the window). Two panels appear:
+
+- **PHPCS Results** — violations reported by PHP_CodeSniffer
+- **PHPStan Results** — errors reported by PHPStan
+
+### 3 — Run an analysis
+
+Each panel has its own toolbar with three action buttons:
+
+**PHPCS panel:**
+
+| Button | Icon | Action |
+|---|---|---|
+| Run | `▶` | Launch the analysis |
+| Fix | `⚡` | Auto-fix violations using PHPCBF |
+| Clear | `⊗` | Reset the panel and discard current results |
+
+**PHPStan panel:**
+
+| Button | Icon | Action |
+|---|---|---|
+| Run | `▶` | Launch the analysis |
+| Clear | `⊗` | Reset the panel and discard current results |
+
+Click **▶** in either panel to start the corresponding tool. The results appear within seconds once the command completes.
+
+### 4 — Read the results
+
+The results are displayed as a file tree. Only files that contain at least one error or warning are listed.
+
+```
+📁 src/Controller/HomeController.php       3 errors
+   ├ 12:5   Missing doc comment for function index()
+   ├ 27:1   Line exceeds 120 characters
+   └ 34:9   Unused variable $data
+
+📁 src/Model/User.php                      1 error
+   └ 8:14   Missing member variable doc comment
+```
+
+Each file node shows the total number of violations. Click the arrow to expand or collapse it.
+
+### 5 — Navigate to an error
+
+| Click target | Result |
 |---|---|
-| ▶ | Run the analysis |
-| ↺ | Re-run the analysis |
-| ⊗ | Clear results |
+| A **file row** | Opens the file in the editor |
+| An **error row** | Opens the file and moves the cursor to the exact line and column |
 
-### Navigating results
+This lets you jump directly from a violation in the list to the offending line in your code, without any manual searching.
 
-```
-📁 includes/Models/Media.php          8 errors
-   ├ 6:17   Missing member variable doc comment
-   ├ 8:19   Missing member variable doc comment
-   └ 18:12  Missing doc comment for function __construct()
-```
+### 6 — Run on save (optional)
 
-- **Click a file row** → opens the file
-- **Click an error row** → opens the file at the exact line and column
+Enable automatic re-analysis whenever you save a PHP file by activating the **Run on Save** option in the settings (see [Configuration](#configuration) below). This keeps the results panel always up to date as you work.
 
 ---
 
 ## Configuration
 
-Settings are available under `File > Preferences > Settings` by searching for `phpcs-vs-ext`.
+Open `File > Preferences > Settings` and search for `phpcs-vs-ext` to access all options.
 
 | Setting | Default | Description |
 |---|---|---|
-| `phpcs-vs-ext.command` | `vendor/bin/phpcs --report=json .` | PHPCS command (must include `--report=json`) |
-| `phpcs-vs-ext.runOnSave` | `false` | Re-run PHPCS on every PHP file save |
-| `phpcs-vs-ext.phpstanCommand` | `vendor/bin/phpstan analyse --error-format=json --no-progress` | PHPStan command (must include `--error-format=json`) |
-| `phpcs-vs-ext.phpstan.runOnSave` | `false` | Re-run PHPStan on every PHP file save |
+| `phpcs-vs-ext.command` | `phpcs --report=json .` | Full PHPCS command. Must include `--report=json`. |
+| `phpcs-vs-ext.phpcsfix` | `vendor/bin/phpcbf --report=json .` | Command used to auto-fix issues via PHPCBF. |
+| `phpcs-vs-ext.runOnSave` | `false` | Re-run PHPCS automatically on every PHP file save. |
+| `phpcs-vs-ext.phpstanCommand` | `vendor/bin/phpstan analyse --error-format=json --no-progress` | Full PHPStan command. Must include `--error-format=json`. |
+| `phpcs-vs-ext.phpstan.runOnSave` | `false` | Re-run PHPStan automatically on every PHP file save. |
+
+> The commands run from the **workspace root folder**. Make sure the binaries are reachable either via `vendor/bin/` or your system `PATH`.
 
 ### Custom command examples
 
 ```json
-// WordPress with a custom standard
+// WordPress coding standard
 "phpcs-vs-ext.command": "vendor/bin/phpcs --standard=WordPress --report=json ."
 
-// PHPStan with a specific analysis level
-"phpcs-vs-ext.phpstanCommand": "vendor/bin/phpstan analyse --level=5 --error-format=json --no-progress src/"
+// PHPStan on a specific level and folder
+"phpcs-vs-ext.phpstanCommand": "vendor/bin/phpstan analyse --level=6 --error-format=json --no-progress src/"
 
-// Global binary targeting a specific folder
+// Global PHPCS binary targeting a subfolder
 "phpcs-vs-ext.command": "phpcs --report=json src/"
+
+// Using a phpstan.neon config file
+"phpcs-vs-ext.phpstanCommand": "vendor/bin/phpstan analyse --error-format=json --no-progress --configuration=phpstan.neon"
 ```
 
 ---
