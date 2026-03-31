@@ -3,7 +3,7 @@
   "publisher": "Honemo",
   "displayName": "PHP Linters (PHPCS + PHPStan)",
   "description": "Run PHP_CodeSniffer and PHPStan and display results in TreeViews with file/error navigation",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Honemo/Phpcs-vs-ext.git"
